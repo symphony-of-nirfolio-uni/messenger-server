@@ -27,8 +27,12 @@ class Message_database:
         args = (receiver,)
         self._cursor.execute("SELECT * FROM messages WHERE receiver=?", args)
         new_messages = self._cursor.fetchall()
+        json_return = {"messages": []}
+        for elem in new_messages:
+            json_elem = {"sender": elem[0], "receiver": elem[1], "message": elem[2]}
+            json_return["messages"].append(json_elem);
         self._db_file.commit()
-        return new_messages
+        return json_return
 
     def delete_messages_of_receiver(self, receiver):
         args = (receiver,)
